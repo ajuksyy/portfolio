@@ -5,6 +5,8 @@ import gsap from "gsap";
 import { CustomCursor } from "@/components/CustomCursor";
 import { FilmGrain } from "@/components/FilmGrain";
 import { HeroThreeInteractive } from "@/components/HeroThreeInteractive";
+import { SectionParticles } from "@/components/SectionParticles";
+import { projectsParticleOptions } from "@/lib/particlePresets";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
@@ -76,7 +78,7 @@ const PROJECTS: Project[] = [
     date: "2025",
     description:
       "Hospital presence with services, people, and facilities — structured content, not a wall of PDFs.",
-    tech: ["Next.js", "React", "Payload CMS"],
+    tech: ["Next.js", "React", "Payload CMS", "Typescript"],
   },
   {
     title: "AI Face Model",
@@ -84,7 +86,7 @@ const PROJECTS: Project[] = [
     date: "2025",
     description:
       "A small deep-learning experiment: map faces against a trained set and talk about similarity in a controlled, honest way.",
-    tech: ["Python", "Deep Learning"],
+    tech: ["Python", "Deep Learning", "DLib", "Cmake"],
   },
   {
     title: "Note Taking App",
@@ -279,6 +281,7 @@ export default function Home() {
         className="tech-section relative px-5 sm:px-8 py-24 md:py-32 overflow-hidden"
       >
         <div className="absolute inset-0 bg-linear-to-b from-[#e8eaef]/92 via-[#f0f1f5]/88 to-[#e4e6ec]/93 backdrop-blur-sm" />
+        <SectionParticles id="tsparticles-toolkit" className="z-1" />
 
         <div className="relative z-10 max-w-6xl mx-auto">
           <div className="section-title mb-4 md:mb-6 md:text-left text-center">
@@ -530,6 +533,7 @@ export default function Home() {
 
       <section className="projects-section relative px-5 sm:px-8 py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-linear-to-b from-[#e6e8ed]/90 via-[#eef0f4]/85 to-[#e2e5ea]/92 backdrop-blur-sm" />
+        <SectionParticles id="tsparticles-projects" className="z-1" options={projectsParticleOptions} />
         <div className="relative z-10 max-w-5xl mx-auto">
           <div className="section-title text-center mb-16 md:mb-20">
             <p
