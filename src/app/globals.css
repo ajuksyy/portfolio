@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #dcdfe5;
+  /* Single page fill — sections use this too (no competing gradients). */
+  --background: #ebecef;
   --foreground: #0c0c0c;
   --ink: #0a0a0a;
   --ink-soft: #2a2a2a;
@@ -52,6 +53,39 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .film-grain {
+    animation: none;
+  }
+}
+
+/* Intro bio: per-letter hover jump (replaces old parallax). */
+@keyframes bio-letter-jump {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  28% {
+    transform: translate3d(0, -11px, 0);
+  }
+  52% {
+    transform: translate3d(0, -3px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.bio-letter {
+  display: inline-block;
+  cursor: default;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bio-letter:hover {
+    animation: bio-letter-jump 0.45s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bio-letter:hover {
     animation: none;
   }
 }

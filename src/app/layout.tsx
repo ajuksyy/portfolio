@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Inter, Outfit, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 
 const displayFont = Outfit({
@@ -11,6 +11,14 @@ const displayFont = Outfit({
 
 const bodyFont = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600"],
+});
+
+/** Long-form bio / editorial blocks — pairs with Inter + Outfit. */
+const serifFont = Source_Serif_4({
+  variable: "--font-source-serif",
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600"],
@@ -28,7 +36,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${displayFont.variable} ${bodyFont.variable} antialiased`}>
+      <body
+        className={`${displayFont.variable} ${bodyFont.variable} ${serifFont.variable} antialiased`}
+      >
         {children}
       </body>
     </html>

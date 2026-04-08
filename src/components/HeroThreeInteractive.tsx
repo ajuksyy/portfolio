@@ -34,7 +34,7 @@ export function HeroThreeInteractive({ className = "" }: HeroThreeInteractivePro
           options={heroParticleOptions}
         />
       ) : (
-        <div className="absolute inset-0 bg-linear-to-br from-[#f0f4f8]/40 to-[#e8ecf2]/30" />
+        <div className="absolute inset-0 bg-background/50" />
       )}
     </div>
   );
