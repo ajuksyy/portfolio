@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useMemo } from "react";
-import Image from "next/image";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { CustomCursor } from "@/components/CustomCursor";
+import { FilmGrain } from "@/components/FilmGrain";
+import { HeroThreeInteractive } from "@/components/HeroThreeInteractive";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
@@ -94,74 +96,8 @@ const PROJECTS: Project[] = [
   },
 ];
 
-function seededRandom(seed: number): number {
-  const x = Math.sin(seed * 127.1 + 12.9898) * 43758.5453;
-  return x - Math.floor(x);
-}
-
-function TropicalLeaf({
-  shade = 0,
-  className = "",
-  style = {},
-}: {
-  shade?: number;
-  className?: string;
-  style?: React.CSSProperties;
-}) {
-  const colors = ["#0b2210", "#0d2818", "#122e1a", "#163520", "#1a4d2e"];
-  const fill = colors[shade % colors.length];
-  return (
-    <svg
-      viewBox="0 0 100 200"
-      className={className}
-      style={style}
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M50,0 C62,12 82,42 89,72 C96,102 91,142 79,168 C67,192 56,199 50,200 C44,199 33,192 21,168 C9,142 4,102 11,72 C18,42 38,12 50,0Z"
-        fill={fill}
-      />
-      <path
-        d="M50,18 L50,188"
-        stroke="rgba(255,255,255,0.035)"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      <path
-        d="M50,52 L26,74 M50,52 L74,74"
-        stroke="rgba(255,255,255,0.025)"
-        strokeWidth="1"
-        fill="none"
-      />
-      <path
-        d="M50,88 L20,116 M50,88 L80,116"
-        stroke="rgba(255,255,255,0.025)"
-        strokeWidth="1"
-        fill="none"
-      />
-      <path
-        d="M50,124 L24,154 M50,124 L76,154"
-        stroke="rgba(255,255,255,0.025)"
-        strokeWidth="1"
-        fill="none"
-      />
-    </svg>
-  );
-}
-
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const fireflies = useMemo(
-    () =>
-      Array.from({ length: 20 }, (_, i) => ({
-        id: i,
-        left: `${seededRandom(i * 3) * 90 + 5}%`,
-        top: `${seededRandom(i * 7 + 1) * 80 + 10}%`,
-        size: 2 + seededRandom(i * 11) * 3,
-      })),
-    [],
-  );
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -186,28 +122,17 @@ export default function Home() {
           anticipatePin: 1,
         },
       });
+      heroTl.to(".hero-backdrop", { opacity: 0, duration: 0.9 }, 0);
       heroTl.to(
-        ".hero-section .leaf-el",
-        {
-          x: (i: number) => [-120, 140, -60][i] ?? 0,
-          y: (i: number) => [0, 48, -110][i] ?? 0,
-          opacity: 0,
-          stagger: 0.08,
-          duration: 1,
-          ease: "power2.in",
-        },
-        0,
+        ".hero-three-wrap",
+        { opacity: 0, scale: 0.92, filter: "blur(8px)", duration: 0.85, ease: "power2.in" },
+        0.05,
       );
-      heroTl.to(".vignette-overlay", { opacity: 0, duration: 1 }, 0);
-      heroTl.to(".mist-layer", { opacity: 0, scale: 1.3, duration: 0.8 }, 0);
       heroTl.to(
         ".hero-text-container",
-        { scale: 2.5, opacity: 0, duration: 0.8, ease: "power2.in" },
-        0.1,
+        { y: -48, opacity: 0, duration: 0.8, ease: "power2.in" },
+        0.06,
       );
-      heroTl.to(".firefly", { opacity: 0, duration: 0.5 }, 0);
-      heroTl.to(".light-rays", { opacity: 0.15, duration: 0.3, ease: "none" }, 0);
-      heroTl.to(".light-rays", { opacity: 0, duration: 0.7, ease: "power1.in" }, 0.3);
 
       [".tech-section", ".experience-section", ".projects-section"].forEach((s) => {
         gsap.from(`${s} .section-title`, {
@@ -277,35 +202,6 @@ export default function Home() {
         });
       });
 
-      gsap.utils
-        .toArray<HTMLElement>(".parallax-leaf")
-        .forEach((leaf, i) => {
-          const dir = i % 2 === 0 ? 1 : -1;
-          gsap.to(leaf, {
-            scrollTrigger: {
-              trigger: leaf,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            },
-            y: -40 * (0.45 + (i % 3) * 0.25),
-            rotation: `+=${dir * 10}`,
-            x: dir * 8,
-          });
-        });
-
-      gsap.utils.toArray<HTMLElement>(".firefly").forEach((el, i) => {
-        gsap.to(el, {
-          x: `random(-70, 70)`,
-          y: `random(-70, 70)`,
-          opacity: `random(0.1, 0.8)`,
-          duration: 3 + (i % 4),
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: i * 0.3,
-        });
-      });
     }, containerRef);
 
     const refresh = () => ScrollTrigger.refresh();
@@ -322,119 +218,111 @@ export default function Home() {
   }, []);
 
   return (
-    <div ref={containerRef} className="bg-[#030a06]">
-      <section className="hero-section relative h-screen w-full overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-b from-[#081a0e] via-[#0d2818] to-[#061208]" />
-        <div className="light-rays absolute inset-0 pointer-events-none opacity-[0.06]">
-          <div className="absolute left-[22%] top-0 h-[70%] w-[50px] rotate-12 bg-linear-to-b from-[#52b788] via-[#52b78830] to-transparent blur-2xl" />
-          <div className="absolute left-[46%] top-0 h-[60%] w-[35px] -rotate-[5deg] bg-linear-to-b from-[#74c69d] via-[#74c69d20] to-transparent blur-2xl" />
-          <div className="absolute left-[72%] top-0 h-[65%] w-[45px] rotate-[9deg] bg-linear-to-b from-[#52b788] via-[#52b78825] to-transparent blur-2xl" />
-        </div>
+    <div
+      ref={containerRef}
+      className="relative min-h-screen bg-[#eef0f3] text-[var(--ink)]"
+    >
+      <FilmGrain />
+      <CustomCursor />
+
+      <div className="relative z-[2]">
+      <section className="hero-section relative flex min-h-screen w-full items-center overflow-hidden">
         <div
-          className="vignette-overlay absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 55% 50% at center, transparent 0%, #030a06ee 100%)",
-          }}
+          className="hero-backdrop pointer-events-none absolute inset-0 bg-linear-to-b from-[#f7f8fa] to-[#e8ebef]"
+          aria-hidden
         />
-        <div className="mist-layer absolute bottom-0 left-0 right-0 h-[40%] bg-linear-to-t from-[#0d281830] via-[#1a4d2e0d] to-transparent blur-md pointer-events-none" />
-        <div className="mist-layer absolute top-0 left-0 right-0 h-[28%] bg-linear-to-b from-[#081a0e90] via-[#0d281812] to-transparent blur-sm pointer-events-none" />
 
-        {fireflies.map((f) => (
-          <div
-            key={f.id}
-            className="firefly absolute rounded-full pointer-events-none"
-            style={{
-              width: f.size,
-              height: f.size,
-              left: f.left,
-              top: f.top,
-              background: "radial-gradient(circle, #74c69d, #52b78800)",
-              boxShadow: "0 0 8px 3px rgba(116,198,157,0.3)",
-              opacity: 0.5,
-            }}
-          />
-        ))}
-
-        <div className="hero-text-container absolute inset-0 flex flex-col items-center justify-center z-10 px-6">
-          <p
-            className="text-sm tracking-[0.35em] uppercase mb-6 opacity-75"
-            style={{ color: "#74c69d", fontFamily: "var(--font-inter)" }}
-          >
-            Hello, I&apos;m
-          </p>
-          <h1
-            className="text-6xl md:text-8xl lg:text-[10rem] font-bold tracking-tight leading-none"
-            style={{ color: "#e8f5e9", fontFamily: "var(--font-playfair)" }}
-          >
-            Ajmal
-          </h1>
-          <div className="w-16 h-px bg-linear-to-r from-transparent via-[#52b788] to-transparent my-6" />
-          <p
-            className="text-base md:text-lg max-w-md text-center leading-relaxed opacity-70"
-            style={{ color: "#a8d5ba", fontFamily: "var(--font-inter)" }}
-          >
-            Frontend developer in the Maldives — interfaces, design handoff, and
-            the occasional 3D rabbit hole.
-          </p>
-          <div className="absolute bottom-12 flex flex-col items-center gap-3 opacity-50">
-            <span
-              className="text-[10px] tracking-[0.3em] uppercase"
-              style={{ color: "#52b788", fontFamily: "var(--font-inter)" }}
+        <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-12 px-6 py-20 md:gap-16 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-10 lg:py-0">
+          <div className="hero-text-container flex flex-col items-center text-center lg:items-start lg:text-left">
+            <p
+              className="text-[13px] text-[var(--ink)]/45"
+              style={{ fontFamily: "var(--font-inter)", letterSpacing: "0.02em" }}
             >
-              Scroll
-            </span>
-            <div className="w-px h-8 bg-linear-to-b from-[#52b788] to-transparent animate-pulse" />
+              Hello — I&apos;m
+            </p>
+            <h1
+              className="mt-3 text-[clamp(3rem,11vw,5.5rem)] font-light leading-none tracking-[-0.03em] text-[var(--ink)]"
+              style={{ fontFamily: "var(--font-outfit)" }}
+            >
+              Ajmal
+            </h1>
+            <p
+              className="mt-5 max-w-sm text-[15px] leading-snug text-[var(--mist-muted)]"
+              style={{ fontFamily: "var(--font-inter)" }}
+            >
+              Frontend developer. Interfaces, motion, and clear design handoff.
+            </p>
+            <a
+              href="#toolkit"
+              className="explore-cta mt-10 inline-flex items-center border-b border-[var(--ink)]/25 pb-1 text-sm text-[var(--ink)] transition-colors hover:border-[var(--ink)]"
+              style={{ fontFamily: "var(--font-inter)" }}
+            >
+              View work
+            </a>
+          </div>
+
+          <div className="hero-three-wrap relative mx-auto aspect-square w-full max-w-[min(100%,380px)] sm:max-w-[420px] lg:max-w-none lg:justify-self-end">
+            <HeroThreeInteractive />
           </div>
         </div>
+
+        <p
+          className="pointer-events-none absolute bottom-8 left-1/2 -translate-x-1/2 text-[11px] text-[var(--ink)]/30"
+          style={{ fontFamily: "var(--font-inter)", letterSpacing: "0.2em" }}
+        >
+          SCROLL
+        </p>
       </section>
 
-      <section className="tech-section relative px-5 sm:px-8 py-24 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-b from-[#061208] via-[#050f0a] to-[#040d08]" />
+      <section
+        id="toolkit"
+        className="tech-section relative px-5 sm:px-8 py-24 md:py-32 overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-linear-to-b from-[#e8eaef]/92 via-[#f0f1f5]/88 to-[#e4e6ec]/93 backdrop-blur-sm" />
 
         <div className="relative z-10 max-w-6xl mx-auto">
           <div className="section-title mb-4 md:mb-6 md:text-left text-center">
             <p
               className="text-xs tracking-[0.35em] uppercase mb-3"
-              style={{ color: "#52b788", fontFamily: "var(--font-inter)" }}
+              style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
             >
               Toolkit
             </p>
             <h2
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]"
-              style={{ color: "#e8f5e9", fontFamily: "var(--font-playfair)" }}
+              style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
             >
               What I actually use
             </h2>
             <p
               className="mt-4 max-w-xl md:mx-0 mx-auto text-sm md:text-base opacity-55 leading-relaxed"
-              style={{ color: "#a8d5ba", fontFamily: "var(--font-inter)" }}
+              style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
             >
               Grouped by how it shows up in real work — not a keyword dump.
             </p>
-            <div className="w-20 h-px bg-linear-to-r from-[#2d6a4f] to-transparent mt-6 md:mx-0 mx-auto" />
+            <div className="mx-auto mt-6 h-px w-20 bg-linear-to-r from-transparent via-[var(--ink)]/20 to-transparent md:mx-0" />
           </div>
 
           <div className="tech-bento mt-14 grid grid-cols-1 gap-5 md:gap-6 lg:grid-cols-12">
-            <article className="lg:col-span-8 rounded-3xl border border-[#2d6a4f]/30 bg-[#0b1711]/95 p-6 md:p-8 backdrop-blur-sm shadow-[0_20px_60px_-38px_rgba(0,0,0,0.9)]">
+            <article className="lg:col-span-8 rounded-3xl border border-black/10 bg-white/72 p-6 md:p-8 backdrop-blur-md shadow-[0_24px_80px_-40px_rgba(15,18,24,0.18)]">
               <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <p
                     className="text-[10px] uppercase tracking-[0.28em] opacity-70"
-                    style={{ color: "#74c69d", fontFamily: "var(--font-inter)" }}
+                    style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
                   >
                     Working kit
                   </p>
                   <h3
                     className="mt-2 text-2xl md:text-3xl leading-tight"
-                    style={{ color: "#e8f5e9", fontFamily: "var(--font-playfair)" }}
+                    style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
                   >
                     My go-to stack when shipping
                   </h3>
                 </div>
                 <span
-                  className="rounded-full border border-[#52b788]/35 bg-[#52b788]/10 px-3 py-1 text-[10px] uppercase tracking-[0.2em]"
-                  style={{ color: "#95d5b2", fontFamily: "var(--font-inter)" }}
+                  className="rounded-full border border-black/14 bg-black/[0.04] px-3 py-1 text-[10px] uppercase tracking-[0.2em]"
+                  style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
                 >
                   {TECH_GROUPS[0].items.length} core tools
                 </span>
@@ -449,8 +337,8 @@ export default function Home() {
                 ].map((point) => (
                   <div
                     key={point}
-                    className="rounded-xl border border-[#2d6a4f]/25 bg-[#0a1410] px-3.5 py-3 text-sm"
-                    style={{ color: "#ccecd6", fontFamily: "var(--font-inter)" }}
+                    className="rounded-xl border border-black/10 bg-white/55 px-3.5 py-3 text-sm"
+                    style={{ color: "var(--ink-soft)", fontFamily: "var(--font-inter)" }}
                   >
                     {point}
                   </div>
@@ -461,7 +349,7 @@ export default function Home() {
                 {TECH_GROUPS[0].items.map((name) => (
                   <span
                     key={name}
-                    className="tech-pill inline-flex items-center rounded-full border border-[#2d6a4f]/45 bg-[#08120d] px-3.5 py-2 text-sm text-[#d8f3dc] transition-colors hover:border-[#52b788]/45 hover:bg-[#52b788]/8 cursor-default"
+                    className="tech-pill inline-flex items-center rounded-full border border-black/12 bg-white/50 px-3.5 py-2 text-sm text-[var(--ink)] transition-colors hover:border-black/22 hover:bg-black/[0.05] cursor-default"
                     style={{ fontFamily: "var(--font-inter)" }}
                   >
                     {name}
@@ -471,20 +359,20 @@ export default function Home() {
             </article>
 
             <aside className="lg:col-span-4 flex flex-col gap-5 md:gap-6">
-              <article className="rounded-3xl border border-[#2d6a4f]/30 bg-[#0a1510] p-6 md:p-7">
+              <article className="rounded-3xl border border-black/10 bg-white/60 p-6 md:p-7">
                 <p
                   className="mb-2 text-[10px] uppercase tracking-[0.25em]"
-                  style={{ color: "#74c69d", fontFamily: "var(--font-inter)" }}
+                  style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
                 >
                   Currently building with
                 </p>
-                <div className="mb-4 h-px w-full bg-linear-to-r from-[#2d6a4f] to-transparent" />
+                <div className="mb-4 h-px w-full bg-linear-to-r from-transparent via-[var(--ink)]/18 to-transparent" />
                 <div className="space-y-2.5">
                   {TECH_GROUPS[1].items.map((name) => (
                     <div
                       key={name}
-                      className="rounded-lg border border-[#2d6a4f]/30 bg-[#08120d] px-3 py-2 text-sm"
-                      style={{ color: "#bfe6cd", fontFamily: "var(--font-inter)" }}
+                      className="rounded-lg border border-black/10 bg-white/50 px-3 py-2 text-sm"
+                      style={{ color: "var(--ink-soft)", fontFamily: "var(--font-inter)" }}
                     >
                       {name}
                     </div>
@@ -492,16 +380,16 @@ export default function Home() {
                 </div>
               </article>
 
-              <article className="rounded-3xl border border-[#2d6a4f]/30 bg-linear-to-br from-[#0d1b13] to-[#08110d] p-6 md:p-7">
+              <article className="rounded-3xl border border-black/10 bg-linear-to-br from-white/65 to-[#e6e8ee]/85 p-6 md:p-7">
                 <h4
                   className="mb-2 text-lg"
-                  style={{ color: "#e8f5e9", fontFamily: "var(--font-playfair)" }}
+                  style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
                 >
                   Outside frontend
                 </h4>
                 <p
                   className="mb-4 text-xs opacity-65"
-                  style={{ color: "#a8d5ba", fontFamily: "var(--font-inter)" }}
+                  style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
                 >
                   Used for experiments, data tasks, and quick internal tooling.
                 </p>
@@ -509,7 +397,7 @@ export default function Home() {
                   {TECH_GROUPS[2].items.map((name) => (
                     <span
                       key={name}
-                      className="tech-pill inline-flex rounded-md border border-white/6 bg-black/25 px-3 py-1.5 text-xs font-medium text-[#95d5b2] transition-colors hover:text-[#d8f3dc] cursor-default"
+                      className="tech-pill inline-flex rounded-md border border-white/6 bg-black/25 px-3 py-1.5 text-xs font-medium text-[var(--mist-muted)] transition-colors hover:text-[var(--ink)] cursor-default"
                       style={{ fontFamily: "var(--font-inter)" }}
                     >
                       {name}
@@ -523,49 +411,49 @@ export default function Home() {
       </section>
 
       <section className="experience-section relative px-5 sm:px-8 py-24 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-b from-[#040d08] via-[#050f0a] to-[#040d08]" />
+        <div className="absolute inset-0 bg-linear-to-b from-[#e6e8ed]/90 via-[#eef0f4]/85 to-[#e2e5ea]/92 backdrop-blur-sm" />
         <div className="relative z-10 max-w-4xl mx-auto">
           <div className="section-title text-center mb-16 md:mb-20">
             <p
               className="text-xs tracking-[0.35em] uppercase mb-4"
-              style={{ color: "#52b788", fontFamily: "var(--font-inter)" }}
+              style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
             >
               Work
             </p>
             <h2
               className="text-4xl md:text-6xl lg:text-7xl leading-tight"
-              style={{ color: "#e8f5e9", fontFamily: "var(--font-playfair)" }}
+              style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
             >
               Experience
             </h2>
-            <div className="w-20 h-px bg-linear-to-r from-transparent via-[#2d6a4f] to-transparent mx-auto mt-6" />
+            <div className="mx-auto mt-6 h-px w-20 bg-linear-to-r from-transparent via-[var(--ink)]/22 to-transparent" />
           </div>
 
           <div className="relative">
-            <div className="absolute left-6 md:left-8 top-0 bottom-0 w-px bg-linear-to-b from-[#2d6a4f60] via-[#2d6a4f30] to-transparent" />
+            <div className="absolute left-6 md:left-8 top-0 bottom-0 w-px bg-linear-to-b from-black/18 via-black/10 to-transparent" />
 
             <div className="exp-card relative pl-16 md:pl-20 pb-14">
-              <div className="absolute left-[18px] md:left-[26px] top-2 w-3 h-3 rounded-full bg-[#52b788] shadow-[0_0_12px_rgba(82,183,136,0.4)]" />
+              <div className="absolute left-[18px] md:left-[26px] top-2 w-3 h-3 rounded-full bg-[var(--ink)] shadow-[0_0_14px_rgba(12,12,14,0.2)]" />
               <div className="flex flex-col md:flex-row md:items-baseline gap-1 md:gap-4 mb-4">
                 <h3
                   className="text-2xl md:text-3xl font-semibold"
                   style={{
-                    color: "#e8f5e9",
-                    fontFamily: "var(--font-playfair)",
+                    color: "var(--ink)",
+                    fontFamily: "var(--font-outfit)",
                   }}
                 >
                   Frontend Developer
                 </h3>
                 <span
                   className="text-sm opacity-50"
-                  style={{ color: "#74c69d", fontFamily: "var(--font-inter)" }}
+                  style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
                 >
                   Feb 2025 – Present
                 </span>
               </div>
               <p
                 className="text-lg mb-4 font-medium"
-                style={{ color: "#52b788", fontFamily: "var(--font-inter)" }}
+                style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
               >
                 Loopcraft — Male City, Maldives
               </p>
@@ -580,11 +468,11 @@ export default function Home() {
                     key={i}
                     className="flex gap-3 text-sm leading-relaxed"
                     style={{
-                      color: "#a8d5ba",
+                      color: "var(--mist-muted)",
                       fontFamily: "var(--font-inter)",
                     }}
                   >
-                    <span className="mt-1.5 shrink-0 w-1 h-1 rounded-full bg-[#2d6a4f]" />
+                    <span className="mt-1.5 shrink-0 w-1 h-1 rounded-full bg-[var(--ink)]" />
                     {item}
                   </li>
                 ))}
@@ -592,27 +480,27 @@ export default function Home() {
             </div>
 
             <div className="exp-card relative pl-16 md:pl-20">
-              <div className="absolute left-[18px] md:left-[26px] top-2 w-3 h-3 rounded-full border-2 border-[#2d6a4f] bg-[#0a1f0a]" />
+              <div className="absolute left-[18px] md:left-[26px] top-2 w-3 h-3 rounded-full border-2 border-[var(--ink)]/35 bg-white" />
               <div className="flex flex-col md:flex-row md:items-baseline gap-1 md:gap-4 mb-4">
                 <h3
                   className="text-2xl md:text-3xl font-semibold"
                   style={{
-                    color: "#e8f5e9",
-                    fontFamily: "var(--font-playfair)",
+                    color: "var(--ink)",
+                    fontFamily: "var(--font-outfit)",
                   }}
                 >
                   Intern
                 </h3>
                 <span
                   className="text-sm opacity-50"
-                  style={{ color: "#74c69d", fontFamily: "var(--font-inter)" }}
+                  style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
                 >
                   Jan 2024 – Sep 2025
                 </span>
               </div>
               <p
                 className="text-lg mb-4 font-medium"
-                style={{ color: "#52b788", fontFamily: "var(--font-inter)" }}
+                style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
               >
                 Loopcraft — Male City, Maldives
               </p>
@@ -626,11 +514,11 @@ export default function Home() {
                     key={i}
                     className="flex gap-3 text-sm leading-relaxed"
                     style={{
-                      color: "#a8d5ba",
+                      color: "var(--mist-muted)",
                       fontFamily: "var(--font-inter)",
                     }}
                   >
-                    <span className="mt-1.5 shrink-0 w-1 h-1 rounded-full bg-[#2d6a4f]" />
+                    <span className="mt-1.5 shrink-0 w-1 h-1 rounded-full bg-[var(--ink)]" />
                     {item}
                   </li>
                 ))}
@@ -641,25 +529,25 @@ export default function Home() {
       </section>
 
       <section className="projects-section relative px-5 sm:px-8 py-24 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-b from-[#040d08] via-[#050f0a] to-[#040d08]" />
+        <div className="absolute inset-0 bg-linear-to-b from-[#e6e8ed]/90 via-[#eef0f4]/85 to-[#e2e5ea]/92 backdrop-blur-sm" />
         <div className="relative z-10 max-w-5xl mx-auto">
           <div className="section-title text-center mb-16 md:mb-20">
             <p
               className="text-xs tracking-[0.35em] uppercase mb-4"
-              style={{ color: "#52b788", fontFamily: "var(--font-inter)" }}
+              style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
             >
               Selected builds
             </p>
             <h2
               className="text-4xl md:text-6xl lg:text-7xl leading-tight"
-              style={{ color: "#e8f5e9", fontFamily: "var(--font-playfair)" }}
+              style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
             >
               Projects
             </h2>
-            <div className="w-20 h-px bg-linear-to-r from-transparent via-[#2d6a4f] to-transparent mx-auto mt-6" />
+            <div className="mx-auto mt-6 h-px w-20 bg-linear-to-r from-transparent via-[var(--ink)]/22 to-transparent" />
           </div>
 
-          <div className="absolute left-1/2 top-[260px] bottom-36 w-px bg-linear-to-b from-transparent via-[#2d6a4f]/15 to-transparent hidden md:block" />
+          <div className="absolute left-1/2 top-[260px] bottom-36 w-px bg-linear-to-b from-transparent via-[var(--ink)]/15 to-transparent hidden md:block" />
 
           <div className="space-y-16 md:space-y-24">
             {PROJECTS.map((project, i) => {
@@ -668,20 +556,20 @@ export default function Home() {
                 <div key={project.title} className="project-card relative">
                   <span
                     className={`ghost-number absolute top-0 text-[100px] md:text-[140px] font-bold leading-none select-none pointer-events-none hidden md:block ${isLeft ? "right-2 md:right-[6%]" : "left-2 md:left-[6%]"}`}
-                    style={{ color: "#0d2818", fontFamily: "var(--font-playfair)" }}
+                    style={{ color: "rgba(12,14,18,0.07)", fontFamily: "var(--font-outfit)" }}
                   >
                     {String(i + 1).padStart(2, "0")}
                   </span>
 
-                  <div className="absolute left-1/2 top-5 -translate-x-1/2 w-2 h-2 rounded-full bg-[#0a1f0a] border border-[#2d6a4f]/50 hidden md:block z-10" />
+                  <div className="absolute left-1/2 top-5 -translate-x-1/2 w-2 h-2 rounded-full bg-white border border-black/12 hidden md:block z-10" />
 
                   <div className={`relative md:w-[54%] ${isLeft ? "" : "md:ml-auto"}`}>
-                    <div className="group relative overflow-hidden rounded-2xl border border-[#2d6a4f]/20 bg-[#0c1812]/90 p-6 md:p-8 transition-all duration-500 hover:border-[#52b788]/30 hover:shadow-[0_0_40px_-12px_rgba(82,183,136,0.12)]">
-                      <div className="absolute inset-0 bg-linear-to-br from-[#52b78805] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="group relative overflow-hidden rounded-2xl border border-black/8 bg-white/72 p-6 md:p-8 backdrop-blur-md transition-all duration-500 hover:border-black/18 hover:shadow-[0_20px_50px_-24px_rgba(15,18,24,0.12)]">
+                      <div className="absolute inset-0 bg-linear-to-br from-black/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                       <span
                         className="md:hidden text-4xl font-bold absolute top-4 right-4 leading-none select-none pointer-events-none"
-                        style={{ color: "#0d2818", fontFamily: "var(--font-playfair)" }}
+                        style={{ color: "rgba(12,14,18,0.07)", fontFamily: "var(--font-outfit)" }}
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
@@ -691,8 +579,8 @@ export default function Home() {
                           <h3
                             className="text-xl md:text-2xl font-semibold"
                             style={{
-                              color: "#e8f5e9",
-                              fontFamily: "var(--font-playfair)",
+                              color: "var(--ink)",
+                              fontFamily: "var(--font-outfit)",
                             }}
                           >
                             {project.title}
@@ -702,7 +590,7 @@ export default function Home() {
                               href={project.link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="shrink-0 text-[#52b788] hover:text-[#74c69d] transition-colors"
+                              className="shrink-0 text-[var(--mist-accent)] hover:text-[var(--ink)] transition-colors"
                             >
                               <svg
                                 width="16"
@@ -724,7 +612,7 @@ export default function Home() {
                         <p
                           className="text-xs mb-3 opacity-50"
                           style={{
-                            color: "#74c69d",
+                            color: "var(--mist-muted)",
                             fontFamily: "var(--font-inter)",
                           }}
                         >
@@ -733,7 +621,7 @@ export default function Home() {
                         <p
                           className="text-sm leading-relaxed mb-5"
                           style={{
-                            color: "#a8d5ba",
+                            color: "var(--mist-muted)",
                             fontFamily: "var(--font-inter)",
                           }}
                         >
@@ -743,9 +631,9 @@ export default function Home() {
                           {project.tech.map((t) => (
                             <span
                               key={t}
-                              className="text-[10px] tracking-wider uppercase px-2.5 py-1 rounded-md border border-[#2d6a4f]/30 bg-[#071208]/60"
+                              className="text-[10px] tracking-wider uppercase px-2.5 py-1 rounded-md border border-black/10 bg-white/45"
                               style={{
-                                color: "#52b788",
+                                color: "var(--mist-accent)",
                                 fontFamily: "var(--font-inter)",
                               }}
                             >
@@ -764,26 +652,26 @@ export default function Home() {
       </section>
 
       <section className="education-section relative px-5 sm:px-8 py-24 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-b from-[#040d08] via-[#050f0a] to-[#040d08]" />
+        <div className="absolute inset-0 bg-linear-to-b from-[#e6e8ed]/90 via-[#eef0f4]/85 to-[#e2e5ea]/92 backdrop-blur-sm" />
         <div className="relative z-10 max-w-5xl mx-auto">
           <header className="mb-12 md:mb-16 md:flex md:items-end md:justify-between gap-8">
             <div>
               <p
                 className="text-xs tracking-[0.35em] uppercase mb-3"
-                style={{ color: "#52b788", fontFamily: "var(--font-inter)" }}
+                style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
               >
                 Formal path
               </p>
               <h2
                 className="text-4xl md:text-6xl lg:text-7xl leading-tight"
-                style={{ color: "#e8f5e9", fontFamily: "var(--font-playfair)" }}
+                style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
               >
                 Education
               </h2>
             </div>
             <p
               className="mt-4 md:mt-0 max-w-sm text-sm opacity-50 leading-relaxed md:text-right"
-              style={{ color: "#a8d5ba", fontFamily: "var(--font-inter)" }}
+              style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
             >
               Degrees and certs, plain and readable — no animation hiding this
               block.
@@ -805,26 +693,26 @@ export default function Home() {
             ].map((edu) => (
               <article
                 key={edu.degree}
-                className="rounded-2xl border border-[#2d6a4f]/30 bg-[#0c1812] p-7 md:p-8 shadow-[0_12px_40px_-20px_rgba(0,0,0,0.5)] hover:border-[#52b788]/35 transition-colors"
+                className="rounded-2xl border border-black/10 bg-white/70 p-7 md:p-8 backdrop-blur-md shadow-[0_16px_48px_-28px_rgba(15,18,24,0.15)] hover:border-black/14 transition-colors"
               >
                 <h3
                   className="text-xl font-semibold mb-2"
                   style={{
-                    color: "#e8f5e9",
-                    fontFamily: "var(--font-playfair)",
+                    color: "var(--ink)",
+                    fontFamily: "var(--font-outfit)",
                   }}
                 >
                   {edu.degree}
                 </h3>
                 <p
                   className="text-sm mb-2"
-                  style={{ color: "#52b788", fontFamily: "var(--font-inter)" }}
+                  style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
                 >
                   {edu.school}
                 </p>
                 <p
                   className="text-xs opacity-55"
-                  style={{ color: "#a8d5ba", fontFamily: "var(--font-inter)" }}
+                  style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
                 >
                   {edu.date} · Male&apos;, Maldives
                 </p>
@@ -832,10 +720,10 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="border-t border-[#2d6a4f]/20 pt-14">
+          <div className="border-t border-black/8 pt-14">
             <h3
               className="text-2xl md:text-3xl mb-10"
-              style={{ color: "#e8f5e9", fontFamily: "var(--font-playfair)" }}
+              style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
             >
               Certifications &amp; awards
             </h3>
@@ -859,12 +747,12 @@ export default function Home() {
               ].map((cert) => (
                 <article
                   key={cert.title}
-                  className="rounded-2xl border border-[#2d6a4f]/25 bg-[#0a1410] p-6 md:p-7 hover:border-[#52b788]/30 transition-colors"
+                  className="rounded-2xl border border-black/10 bg-white/65 p-6 md:p-7 backdrop-blur-sm hover:border-black/18 transition-colors"
                 >
                   <p
                     className="text-[10px] tracking-[0.2em] uppercase mb-2"
                     style={{
-                      color: "#52b788",
+                      color: "var(--mist-accent)",
                       fontFamily: "var(--font-inter)",
                     }}
                   >
@@ -873,8 +761,8 @@ export default function Home() {
                   <h4
                     className="text-lg font-semibold mb-2"
                     style={{
-                      color: "#e8f5e9",
-                      fontFamily: "var(--font-playfair)",
+                      color: "var(--ink)",
+                      fontFamily: "var(--font-outfit)",
                     }}
                   >
                     {cert.title}
@@ -882,7 +770,7 @@ export default function Home() {
                   <p
                     className="text-xs leading-relaxed opacity-65"
                     style={{
-                      color: "#a8d5ba",
+                      color: "var(--mist-muted)",
                       fontFamily: "var(--font-inter)",
                     }}
                   >
@@ -896,24 +784,24 @@ export default function Home() {
       </section>
 
       <section className="contact-section relative px-5 sm:px-8 py-24 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-b from-[#040d08] via-[#050f0a] to-[#030a06]" />
+        <div className="absolute inset-0 bg-linear-to-b from-[#e2e4ea]/93 via-[#eceef3]/88 to-[#dfe2e8]/94 backdrop-blur-sm" />
         <div className="relative z-10 max-w-3xl mx-auto">
           <div className="md:text-left text-center mb-10">
             <p
               className="text-xs tracking-[0.35em] uppercase mb-3"
-              style={{ color: "#52b788", fontFamily: "var(--font-inter)" }}
+              style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
             >
               Contact
             </p>
             <h2
               className="text-4xl md:text-6xl lg:text-7xl leading-tight mb-4"
-              style={{ color: "#e8f5e9", fontFamily: "var(--font-playfair)" }}
+              style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
             >
               Say hello
             </h2>
             <p
               className="text-sm md:text-base leading-relaxed max-w-lg opacity-55 md:mx-0 mx-auto"
-              style={{ color: "#a8d5ba", fontFamily: "var(--font-inter)" }}
+              style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
             >
               Hulhumale, Maldives · open to remote roles and interesting
               collaborations. Pick whatever channel you actually check.
@@ -923,25 +811,25 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row md:flex-row flex-wrap md:justify-start justify-center gap-3 sm:gap-4">
             <a
               href="mailto:ajmalpomp124@gmail.com"
-              className="group inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl border border-[#2d6a4f]/40 bg-[#0c1812] transition-all duration-300 hover:border-[#52b788]/50 hover:bg-[#0f2218]"
+              className="group inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl border border-black/12 bg-white/70 backdrop-blur-sm transition-all duration-300 hover:border-black/25 hover:bg-white/92"
             >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#52b788"
+                stroke="var(--mist-accent)"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="group-hover:stroke-[#74c69d] transition-colors shrink-0"
+                className="group-hover:stroke-[var(--ink)] transition-colors shrink-0"
               >
                 <rect width="20" height="16" x="2" y="4" rx="2" />
                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
               </svg>
               <span
                 className="text-sm break-all sm:break-normal text-left"
-                style={{ color: "#e8f5e9", fontFamily: "var(--font-inter)" }}
+                style={{ color: "var(--ink)", fontFamily: "var(--font-inter)" }}
               >
                 ajmalpomp124@gmail.com
               </span>
@@ -950,14 +838,14 @@ export default function Home() {
               href="https://www.linkedin.com/in/mohamed-ajmal-5abb432b7/"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl border border-[#2d6a4f]/40 bg-[#0c1812] transition-all duration-300 hover:border-[#52b788]/50 hover:bg-[#0f2218]"
+              className="group inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl border border-black/12 bg-white/70 backdrop-blur-sm transition-all duration-300 hover:border-black/25 hover:bg-white/92"
             >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
-                fill="#52b788"
-                className="group-hover:fill-[#74c69d] transition-colors shrink-0"
+                fill="var(--mist-accent)"
+                className="group-hover:fill-[var(--ink)] transition-colors shrink-0"
               >
                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
                 <rect width="4" height="12" x="2" y="9" />
@@ -965,7 +853,7 @@ export default function Home() {
               </svg>
               <span
                 className="text-sm"
-                style={{ color: "#e8f5e9", fontFamily: "var(--font-inter)" }}
+                style={{ color: "var(--ink)", fontFamily: "var(--font-inter)" }}
               >
                 LinkedIn
               </span>
@@ -974,20 +862,20 @@ export default function Home() {
               href="https://gitlab.com/ajuksyy"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl border border-[#2d6a4f]/40 bg-[#0c1812] transition-all duration-300 hover:border-[#52b788]/50 hover:bg-[#0f2218]"
+              className="group inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl border border-black/12 bg-white/70 backdrop-blur-sm transition-all duration-300 hover:border-black/25 hover:bg-white/92"
             >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
-                fill="#52b788"
-                className="group-hover:fill-[#74c69d] transition-colors shrink-0"
+                fill="var(--mist-accent)"
+                className="group-hover:fill-[var(--ink)] transition-colors shrink-0"
               >
                 <path d="m22 13.29-3.33-10a.42.42 0 0 0-.14-.18.38.38 0 0 0-.22-.11.39.39 0 0 0-.23.07.42.42 0 0 0-.14.18l-2.26 6.67H8.32L6.06 3.26a.42.42 0 0 0-.14-.18.38.38 0 0 0-.23-.07.39.39 0 0 0-.22.11.42.42 0 0 0-.14.18L2 13.29a.74.74 0 0 0 .27.83L12 21l9.69-6.88a.71.71 0 0 0 .31-.83Z" />
               </svg>
               <span
                 className="text-sm"
-                style={{ color: "#e8f5e9", fontFamily: "var(--font-inter)" }}
+                style={{ color: "var(--ink)", fontFamily: "var(--font-inter)" }}
               >
                 GitLab
               </span>
@@ -996,20 +884,22 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="relative px-6 py-10 text-center border-t border-[#2d6a4f]/10">
-        <div className="absolute inset-0 bg-[#030a06]" />
+      <footer className="relative border-t border-black/6 px-6 py-10 text-center">
+        <div className="absolute inset-0 bg-[#e4e6eb]/95 backdrop-blur-sm" />
         <div className="relative z-10 flex flex-col items-center gap-3">
-          <div className="w-6 h-6 opacity-[0.08]">
-            <TropicalLeaf shade={3} />
-          </div>
+          <div
+            className="h-px w-10 bg-linear-to-r from-transparent via-[var(--ink)]/25 to-transparent"
+            aria-hidden
+          />
           <p
-            className="text-xs opacity-35"
-            style={{ color: "#74c69d", fontFamily: "var(--font-inter)" }}
+            className="text-xs text-[var(--mist-muted)]/80"
+            style={{ fontFamily: "var(--font-inter)" }}
           >
             Mohamed Ajmal Ahmed · {new Date().getFullYear()}
           </p>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
