@@ -39,7 +39,7 @@ const TECH_GROUPS: { title: string; note: string; items: string[] }[] = [
   {
     title: "Content & data",
     note: "Shipping things people update in production.",
-    items: ["Payload CMS", "Laravel", "PostgreSQL"],
+    items: ["Next.js", "Payload CMS", "Typescript"],
   },
   {
     title: "Languages",
@@ -143,9 +143,14 @@ export default function Home() {
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
-      duration: 1.4,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.85,
+      easing: (t: number) => 1 - Math.pow(1 - t, 4),
       smoothWheel: true,
+      lerp: 0.065,
+      wheelMultiplier: 0.92,
+      touchMultiplier: 1,
+      syncTouch: true,
+      syncTouchLerp: 0.07,
     });
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add((time) => lenis.raf(time * 1000));
@@ -156,9 +161,9 @@ export default function Home() {
         scrollTrigger: {
           trigger: ".hero-section",
           start: "top top",
-          end: "+=250%",
+          end: "+=105%",
           pin: true,
-          scrub: 1.5,
+          scrub: true,
           anticipatePin: 1,
         },
       });
