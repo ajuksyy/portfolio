@@ -98,6 +98,38 @@ const PROJECTS: Project[] = [
   },
 ];
 
+const EDUCATION_ENTRIES = [
+  {
+    range: "2023 – Present",
+    title: "B.Sc. Computer Science",
+    school: "Maldives National University",
+    place: "Malé, Maldives",
+  },
+  {
+    range: "2020 – 2022",
+    title: "High School Diploma",
+    school: "Centre for Higher Secondary Education",
+    place: "Malé, Maldives",
+  },
+] as const;
+
+const CERT_SPOTLIGHT = {
+  label: "Gold · team",
+  title: "Robotics Hackathon 2025",
+  body: "Cube-collector robot — mechanical layout and control logic with the team.",
+} as const;
+
+const CERT_CISCO = [
+  {
+    title: "CCNA 1",
+    body: "Routers, switches, IP basics, and a first pass at securing small nets.",
+  },
+  {
+    title: "CCNA 2",
+    body: "VLANs, routing protocols, ACLs, wireless, multi-site WAN thinking.",
+  },
+] as const;
+
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -333,10 +365,10 @@ export default function Home() {
 
               <div className="mb-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {[
-                  "Starts with layout and type rhythm",
-                  "Animations only where they support reading",
-                  "Design handoff stays true to spacing",
-                  "Built for maintainers, not demos",
+                  "Proficient in Frontend Development",
+                  "API Intergrations",
+                  "Minimalistic designs",
+                  "Familiar with Libraries and Frameworks",
                 ].map((point) => (
                   <div
                     key={point}
@@ -657,131 +689,141 @@ export default function Home() {
 
       <section className="education-section relative px-5 sm:px-8 py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-linear-to-b from-[#e6e8ed]/90 via-[#eef0f4]/85 to-[#e2e5ea]/92 backdrop-blur-sm" />
-        <div className="relative z-10 max-w-5xl mx-auto">
-          <header className="mb-12 md:mb-16 md:flex md:items-end md:justify-between gap-8">
-            <div>
-              <p
-                className="text-xs tracking-[0.35em] uppercase mb-3"
-                style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
-              >
-                Formal path
-              </p>
+        <div
+          className="pointer-events-none absolute right-[8%] top-[42%] hidden lg:block h-48 w-48 rounded-full border border-black/6"
+          aria-hidden
+        />
+        <div className="relative z-10 max-w-4xl mx-auto">
+          <header className="mb-14 md:mb-20">
+            <p
+              className="text-[11px] tracking-[0.28em] uppercase mb-4"
+              style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
+            >
+              Formal path
+            </p>
+            <div className="md:flex md:items-baseline md:justify-between gap-8 md:gap-12">
               <h2
-                className="text-4xl md:text-6xl lg:text-7xl leading-tight"
+                className="text-4xl md:text-5xl lg:text-6xl leading-[1.05] font-light tracking-[-0.02em]"
                 style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
               >
                 Education
               </h2>
+              <p
+                className="mt-5 md:mt-0 max-w-[16rem] text-[13px] leading-relaxed md:text-right"
+                style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
+              >
+                Started my education in Malé — Currently pursuing a B.Sc. of Computer Science at MNU
+              </p>
             </div>
-            <p
-              className="mt-4 md:mt-0 max-w-sm text-sm opacity-50 leading-relaxed md:text-right"
-              style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
-            >
-              Degrees and certs, plain and readable — no animation hiding this
-              block.
-            </p>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 mb-16">
-            {[
-              {
-                degree: "B.Sc. Computer Science",
-                school: "Maldives National University",
-                date: "2023 – Present",
-              },
-              {
-                degree: "High School Diploma",
-                school: "Centre for Higher Secondary Education",
-                date: "2020 – 2022",
-              },
-            ].map((edu) => (
-              <article
-                key={edu.degree}
-                className="rounded-2xl border border-black/10 bg-white/70 p-7 md:p-8 backdrop-blur-md shadow-[0_16px_48px_-28px_rgba(15,18,24,0.15)] hover:border-black/14 transition-colors"
-              >
-                <h3
-                  className="text-xl font-semibold mb-2"
-                  style={{
-                    color: "var(--ink)",
-                    fontFamily: "var(--font-outfit)",
-                  }}
-                >
-                  {edu.degree}
-                </h3>
-                <p
-                  className="text-sm mb-2"
-                  style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
-                >
-                  {edu.school}
-                </p>
-                <p
-                  className="text-xs opacity-55"
-                  style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
-                >
-                  {edu.date} · Male&apos;, Maldives
-                </p>
-              </article>
-            ))}
+          <div className="relative mb-20 md:mb-24">
+            {/* Single axis: line + dots share center (w-px centered with -translate-x-1/2) */}
+            <div
+              className="absolute left-[15px] top-2 bottom-2 w-px -translate-x-1/2 bg-linear-to-b from-black/12 via-black/8 to-transparent"
+              aria-hidden
+            />
+            <ul className="space-y-14 md:space-y-16">
+              {EDUCATION_ENTRIES.map((edu) => (
+                <li key={edu.title} className="relative pl-10 md:pl-11">
+                  <span
+                    className="absolute left-[15px] top-[0.35rem] size-2 -translate-x-1/2 rounded-full border-2 border-white bg-(--ink)/25 shadow-[0_0_0_1px_rgba(15,18,24,0.08)]"
+                    aria-hidden
+                  />
+                  <time
+                    className="block text-[11px] tabular-nums tracking-[0.12em] uppercase mb-2"
+                    style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
+                  >
+                    {edu.range}
+                  </time>
+                  <h3
+                    className="text-xl md:text-2xl font-normal leading-snug mb-1.5"
+                    style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
+                  >
+                    {edu.title}
+                  </h3>
+                  <p
+                    className="text-sm"
+                    style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
+                  >
+                    {edu.school}
+                  </p>
+                  <p
+                    className="mt-2 text-xs opacity-60"
+                    style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
+                  >
+                    {edu.place}
+                  </p>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div className="border-t border-black/8 pt-14">
+          <div className="border-t border-black/10 pt-16 md:pt-20">
             <h3
-              className="text-2xl md:text-3xl mb-10"
+              className="text-xl md:text-2xl font-light tracking-[-0.02em] mb-2"
               style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
             >
               Certifications &amp; awards
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {[
-                {
-                  title: "Robotics Hackathon 2025",
-                  detail: "Gold",
-                  sub: "Cube-collector robot — mechanical layout and control logic with the team.",
-                },
-                {
-                  title: "CCNA 1",
-                  detail: "Cisco",
-                  sub: "Routers, switches, IP basics, and a first pass at securing small nets.",
-                },
-                {
-                  title: "CCNA 2",
-                  detail: "Cisco",
-                  sub: "VLANs, routing protocols, ACLs, wireless, multi-site WAN thinking.",
-                },
-              ].map((cert) => (
-                <article
-                  key={cert.title}
-                  className="rounded-2xl border border-black/10 bg-white/65 p-6 md:p-7 backdrop-blur-sm hover:border-black/18 transition-colors"
+            <p
+              className="text-xs mb-10 max-w-md opacity-70"
+              style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
+            >
+              Hackathon hardware win plus two Cisco modules — the networking pair
+              belongs together.
+            </p>
+
+            <article className="mb-8 rounded-2xl border border-amber-950/10 bg-linear-to-br from-amber-50/80 via-white/60 to-white/40 p-6 md:p-8 backdrop-blur-sm">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
+                <span
+                  className="inline-flex w-fit shrink-0 rounded-lg border border-amber-900/15 bg-amber-100/60 px-2.5 py-1 text-[10px] font-medium tracking-wide text-amber-950/75"
+                  style={{ fontFamily: "var(--font-inter)" }}
                 >
-                  <p
-                    className="text-[10px] tracking-[0.2em] uppercase mb-2"
-                    style={{
-                      color: "var(--mist-accent)",
-                      fontFamily: "var(--font-inter)",
-                    }}
-                  >
-                    {cert.detail}
-                  </p>
+                  {CERT_SPOTLIGHT.label}
+                </span>
+                <div className="min-w-0">
                   <h4
-                    className="text-lg font-semibold mb-2"
-                    style={{
-                      color: "var(--ink)",
-                      fontFamily: "var(--font-outfit)",
-                    }}
+                    className="text-lg md:text-xl font-normal leading-tight mb-2"
+                    style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
                   >
-                    {cert.title}
+                    {CERT_SPOTLIGHT.title}
                   </h4>
                   <p
-                    className="text-xs leading-relaxed opacity-65"
-                    style={{
-                      color: "var(--mist-muted)",
-                      fontFamily: "var(--font-inter)",
-                    }}
+                    className="text-sm leading-relaxed"
+                    style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
                   >
-                    {cert.sub}
+                    {CERT_SPOTLIGHT.body}
                   </p>
-                </article>
-              ))}
+                </div>
+              </div>
+            </article>
+
+            <div className="rounded-2xl border border-slate-400/15 bg-white/45 p-6 md:p-8 backdrop-blur-sm">
+              <p
+                className="text-[10px] tracking-[0.22em] uppercase mb-6 opacity-55"
+                style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
+              >
+                Cisco · networking track
+              </p>
+              <div className="grid gap-8 md:grid-cols-2 md:gap-0 md:divide-x md:divide-black/8">
+                {CERT_CISCO.map((c, i) => (
+                  <div key={c.title} className={i === 1 ? "md:pl-10" : "md:pr-10"}>
+                    <h4
+                      className="text-base font-normal mb-2"
+                      style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
+                    >
+                      {c.title}
+                    </h4>
+                    <p
+                      className="text-[13px] leading-relaxed opacity-80"
+                      style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
+                    >
+                      {c.body}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
