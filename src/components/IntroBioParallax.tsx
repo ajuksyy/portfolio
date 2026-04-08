@@ -32,6 +32,33 @@ const paragraphVariant: Variants = {
   },
 };
 
+/** Keeps each word on one line; per-letter spans are only inside the word (line breaks happen between words). */
+function WordLetters({ word, wordKey }: { word: string; wordKey: string }) {
+  return (
+    <span className="inline-block whitespace-nowrap">
+      {Array.from(word).map((char, ci) => (
+        <span key={`${wordKey}-${ci}`} className="bio-letter inline-block">
+          {char}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function renderParagraphWithWordBreaks(paragraph: string, paragraphIndex: number) {
+  return paragraph.split(/(\s+)/).map((segment, si) => {
+    if (/^\s+$/.test(segment)) {
+      return (
+        <span key={`${paragraphIndex}-sp-${si}`} className="whitespace-pre">
+          {segment}
+        </span>
+      );
+    }
+    if (!segment) return null;
+    return <WordLetters key={`${paragraphIndex}-w-${si}`} word={segment} wordKey={`${paragraphIndex}-${si}`} />;
+  });
+}
+
 export function IntroBioParallax({ paragraphs }: IntroBioParallaxProps) {
   return (
     <motion.div
@@ -53,11 +80,7 @@ export function IntroBioParallax({ paragraphs }: IntroBioParallaxProps) {
               letterSpacing: "0.01em",
             }}
           >
-            {Array.from(paragraph).map((char, ci) => (
-              <span key={`${pi}-${ci}`} className="bio-letter inline-block">
-                {char === " " ? "\u00A0" : char}
-              </span>
-            ))}
+            {renderParagraphWithWordBreaks(paragraph, pi)}
           </motion.p>
         ))}
       </div>
