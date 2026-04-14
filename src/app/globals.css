@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
-:root {
-  /* Single page fill — sections use this too (no competing gradients). */
+/* ── Minimal (default) ─────────────────────────────────── */
+:root,
+[data-theme="minimal"] {
   --background: #ebecef;
   --foreground: #0c0c0c;
   --ink: #0a0a0a;
@@ -12,8 +13,233 @@
   --panel: rgba(252, 252, 253, 0.78);
   --panel-strong: rgba(245, 245, 247, 0.92);
   --panel-border: rgba(0, 0, 0, 0.08);
+
+  --card-bg: rgba(255, 255, 255, 0.72);
+  --card-bg-hover: rgba(255, 255, 255, 0.92);
+  --card-border: rgba(0, 0, 0, 0.1);
+  --card-border-hover: rgba(0, 0, 0, 0.22);
+
+  --pill-bg: rgba(255, 255, 255, 0.5);
+  --pill-border: rgba(0, 0, 0, 0.12);
+  --pill-hover-bg: rgba(0, 0, 0, 0.05);
+  --pill-hover-border: rgba(0, 0, 0, 0.22);
+
+  --timeline-dot: #0a0a0a;
+  --timeline-line: rgba(0, 0, 0, 0.12);
+  --ghost-number: rgba(12, 14, 18, 0.07);
+  --cert-spotlight-bg: linear-gradient(135deg, rgba(255, 251, 235, 0.8), rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.4));
+  --cert-spotlight-border: rgba(69, 26, 3, 0.1);
+  --cert-badge-bg: rgba(254, 243, 199, 0.6);
+  --cert-badge-border: rgba(69, 26, 3, 0.15);
+  --cert-badge-text: rgba(69, 26, 3, 0.75);
+  --cert-panel-bg: rgba(255, 255, 255, 0.45);
+  --cert-panel-border: rgba(148, 163, 184, 0.15);
+
+  --contact-btn-bg: rgba(255, 255, 255, 0.7);
+  --contact-btn-border: rgba(0, 0, 0, 0.12);
+  --contact-btn-hover-bg: rgba(255, 255, 255, 0.92);
+  --contact-btn-hover-border: rgba(0, 0, 0, 0.25);
+  --contact-icon: var(--mist-accent);
+
+  --footer-border: rgba(0, 0, 0, 0.06);
+  --divider: rgba(0, 0, 0, 0.12);
+
+  --switcher-bg: rgba(255, 255, 255, 0.72);
+  --switcher-border: rgba(0, 0, 0, 0.1);
+  --switcher-text: var(--ink);
+  --switcher-panel-bg: rgba(255, 255, 255, 0.88);
+  --switcher-panel-border: rgba(0, 0, 0, 0.08);
+  --switcher-option-hover: rgba(0, 0, 0, 0.04);
+  --switcher-option-active-bg: rgba(0, 0, 0, 0.06);
+  --switcher-icon-idle-bg: rgba(0, 0, 0, 0.05);
+  --switcher-icon-active-bg: rgba(0, 0, 0, 0.1);
+  --switcher-check: var(--ink);
+
+  --scanline: transparent;
+  --glow: transparent;
 }
 
+/* ── Dark ──────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --background: #111114;
+  --foreground: #e2e2e6;
+  --ink: #eaeaee;
+  --ink-soft: #c0c0c8;
+  --mist-muted: #8e8e98;
+  --mist-accent: #b0b0ba;
+  --mist-line: rgba(255, 255, 255, 0.1);
+  --panel: rgba(26, 26, 32, 0.82);
+  --panel-strong: rgba(32, 32, 40, 0.92);
+  --panel-border: rgba(255, 255, 255, 0.06);
+
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-bg-hover: rgba(255, 255, 255, 0.09);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-border-hover: rgba(255, 255, 255, 0.16);
+
+  --pill-bg: rgba(255, 255, 255, 0.06);
+  --pill-border: rgba(255, 255, 255, 0.1);
+  --pill-hover-bg: rgba(255, 255, 255, 0.1);
+  --pill-hover-border: rgba(255, 255, 255, 0.18);
+
+  --timeline-dot: #eaeaee;
+  --timeline-line: rgba(255, 255, 255, 0.1);
+  --ghost-number: rgba(255, 255, 255, 0.04);
+  --cert-spotlight-bg: linear-gradient(135deg, rgba(50, 40, 20, 0.5), rgba(30, 30, 36, 0.4), rgba(24, 24, 30, 0.3));
+  --cert-spotlight-border: rgba(200, 150, 50, 0.15);
+  --cert-badge-bg: rgba(200, 150, 50, 0.15);
+  --cert-badge-border: rgba(200, 150, 50, 0.25);
+  --cert-badge-text: rgba(255, 210, 100, 0.85);
+  --cert-panel-bg: rgba(255, 255, 255, 0.04);
+  --cert-panel-border: rgba(255, 255, 255, 0.08);
+
+  --contact-btn-bg: rgba(255, 255, 255, 0.06);
+  --contact-btn-border: rgba(255, 255, 255, 0.1);
+  --contact-btn-hover-bg: rgba(255, 255, 255, 0.12);
+  --contact-btn-hover-border: rgba(255, 255, 255, 0.2);
+  --contact-icon: var(--mist-accent);
+
+  --footer-border: rgba(255, 255, 255, 0.06);
+  --divider: rgba(255, 255, 255, 0.1);
+
+  --switcher-bg: rgba(255, 255, 255, 0.08);
+  --switcher-border: rgba(255, 255, 255, 0.1);
+  --switcher-text: var(--ink);
+  --switcher-panel-bg: rgba(24, 24, 30, 0.95);
+  --switcher-panel-border: rgba(255, 255, 255, 0.08);
+  --switcher-option-hover: rgba(255, 255, 255, 0.06);
+  --switcher-option-active-bg: rgba(255, 255, 255, 0.08);
+  --switcher-icon-idle-bg: rgba(255, 255, 255, 0.06);
+  --switcher-icon-active-bg: rgba(255, 255, 255, 0.12);
+  --switcher-check: var(--ink);
+
+  --scanline: transparent;
+  --glow: transparent;
+}
+
+/* ── Cyberpunk ────────────────────────────────────────── */
+[data-theme="cyberpunk"] {
+  --background: #0a0a14;
+  --foreground: #e0e0ff;
+  --ink: #f0f0ff;
+  --ink-soft: #c0c0e0;
+  --mist-muted: #8888bb;
+  --mist-accent: #00e5ff;
+  --mist-line: rgba(0, 229, 255, 0.15);
+  --panel: rgba(16, 16, 32, 0.82);
+  --panel-strong: rgba(20, 20, 40, 0.92);
+  --panel-border: rgba(0, 229, 255, 0.12);
+
+  --card-bg: rgba(0, 229, 255, 0.04);
+  --card-bg-hover: rgba(0, 229, 255, 0.08);
+  --card-border: rgba(0, 229, 255, 0.12);
+  --card-border-hover: rgba(0, 229, 255, 0.3);
+
+  --pill-bg: rgba(0, 229, 255, 0.06);
+  --pill-border: rgba(0, 229, 255, 0.15);
+  --pill-hover-bg: rgba(0, 229, 255, 0.12);
+  --pill-hover-border: rgba(0, 229, 255, 0.3);
+
+  --timeline-dot: #00e5ff;
+  --timeline-line: rgba(0, 229, 255, 0.15);
+  --ghost-number: rgba(0, 229, 255, 0.06);
+  --cert-spotlight-bg: linear-gradient(135deg, rgba(255, 0, 128, 0.12), rgba(16, 16, 32, 0.5), rgba(0, 229, 255, 0.08));
+  --cert-spotlight-border: rgba(255, 0, 128, 0.2);
+  --cert-badge-bg: rgba(255, 0, 128, 0.15);
+  --cert-badge-border: rgba(255, 0, 128, 0.3);
+  --cert-badge-text: #ff80bf;
+  --cert-panel-bg: rgba(0, 229, 255, 0.04);
+  --cert-panel-border: rgba(0, 229, 255, 0.12);
+
+  --contact-btn-bg: rgba(0, 229, 255, 0.06);
+  --contact-btn-border: rgba(0, 229, 255, 0.15);
+  --contact-btn-hover-bg: rgba(0, 229, 255, 0.12);
+  --contact-btn-hover-border: rgba(0, 229, 255, 0.35);
+  --contact-icon: #00e5ff;
+
+  --footer-border: rgba(0, 229, 255, 0.1);
+  --divider: rgba(0, 229, 255, 0.12);
+
+  --switcher-bg: rgba(0, 229, 255, 0.08);
+  --switcher-border: rgba(0, 229, 255, 0.2);
+  --switcher-text: #00e5ff;
+  --switcher-panel-bg: rgba(10, 10, 24, 0.96);
+  --switcher-panel-border: rgba(0, 229, 255, 0.15);
+  --switcher-option-hover: rgba(0, 229, 255, 0.08);
+  --switcher-option-active-bg: rgba(0, 229, 255, 0.12);
+  --switcher-icon-idle-bg: rgba(0, 229, 255, 0.06);
+  --switcher-icon-active-bg: rgba(0, 229, 255, 0.18);
+  --switcher-check: #00e5ff;
+
+  --scanline: transparent;
+  --glow: 0 0 20px rgba(0, 229, 255, 0.15);
+}
+
+/* ── Developer (terminal) ────────────────────────────── */
+[data-theme="developer"] {
+  --background: #0d1117;
+  --foreground: #c9d1d9;
+  --ink: #58a6ff;
+  --ink-soft: #8b949e;
+  --mist-muted: #8b949e;
+  --mist-accent: #3fb950;
+  --mist-line: rgba(48, 54, 61, 0.8);
+  --panel: rgba(22, 27, 34, 0.9);
+  --panel-strong: rgba(22, 27, 34, 0.96);
+  --panel-border: rgba(48, 54, 61, 0.6);
+
+  --card-bg: rgba(22, 27, 34, 0.75);
+  --card-bg-hover: rgba(22, 27, 34, 0.9);
+  --card-border: rgba(48, 54, 61, 0.6);
+  --card-border-hover: rgba(63, 185, 80, 0.3);
+
+  --pill-bg: rgba(22, 27, 34, 0.6);
+  --pill-border: rgba(48, 54, 61, 0.6);
+  --pill-hover-bg: rgba(63, 185, 80, 0.1);
+  --pill-hover-border: rgba(63, 185, 80, 0.3);
+
+  --timeline-dot: #3fb950;
+  --timeline-line: rgba(48, 54, 61, 0.6);
+  --ghost-number: rgba(88, 166, 255, 0.06);
+  --cert-spotlight-bg: linear-gradient(135deg, rgba(63, 185, 80, 0.08), rgba(22, 27, 34, 0.6), rgba(22, 27, 34, 0.4));
+  --cert-spotlight-border: rgba(63, 185, 80, 0.2);
+  --cert-badge-bg: rgba(63, 185, 80, 0.1);
+  --cert-badge-border: rgba(63, 185, 80, 0.25);
+  --cert-badge-text: #3fb950;
+  --cert-panel-bg: rgba(22, 27, 34, 0.6);
+  --cert-panel-border: rgba(48, 54, 61, 0.5);
+
+  --contact-btn-bg: rgba(22, 27, 34, 0.7);
+  --contact-btn-border: rgba(48, 54, 61, 0.6);
+  --contact-btn-hover-bg: rgba(63, 185, 80, 0.08);
+  --contact-btn-hover-border: rgba(63, 185, 80, 0.3);
+  --contact-icon: #3fb950;
+
+  --footer-border: rgba(48, 54, 61, 0.5);
+  --divider: rgba(48, 54, 61, 0.6);
+
+  --switcher-bg: rgba(22, 27, 34, 0.85);
+  --switcher-border: rgba(63, 185, 80, 0.2);
+  --switcher-text: #3fb950;
+  --switcher-panel-bg: rgba(13, 17, 23, 0.97);
+  --switcher-panel-border: rgba(48, 54, 61, 0.6);
+  --switcher-option-hover: rgba(63, 185, 80, 0.06);
+  --switcher-option-active-bg: rgba(63, 185, 80, 0.1);
+  --switcher-icon-idle-bg: rgba(48, 54, 61, 0.4);
+  --switcher-icon-active-bg: rgba(63, 185, 80, 0.15);
+  --switcher-check: #3fb950;
+
+  --scanline: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  --glow: transparent;
+}
+
+/* ── Tailwind theme bridge ─────────────────────────────── */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -25,8 +251,138 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, sans-serif;
+  transition: background-color 0.5s ease, color 0.4s ease;
 }
 
+/* ── Developer scanlines overlay ───────────────────────── */
+[data-theme="developer"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: var(--scanline);
+  opacity: 0.5;
+}
+
+/* ── Developer mode: monospace override ────────────────── */
+[data-theme="developer"] body {
+  font-family: var(--font-jetbrains), "Fira Code", "Cascadia Code", "SF Mono", Consolas, monospace;
+}
+[data-theme="developer"] h1,
+[data-theme="developer"] h2,
+[data-theme="developer"] h3,
+[data-theme="developer"] h4 {
+  font-family: var(--font-jetbrains), "Fira Code", "Cascadia Code", "SF Mono", Consolas, monospace !important;
+}
+
+/* ── Developer mode: terminal card chrome ──────────────── */
+[data-theme="developer"] .term-card {
+  border-radius: 8px !important;
+  border: 1px solid rgba(48, 54, 61, 0.8) !important;
+  background: rgba(13, 17, 23, 0.92) !important;
+  padding-top: 2.75rem !important;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: none !important;
+}
+[data-theme="developer"] .term-card::before {
+  content: attr(data-terminal-title);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  padding: 0 0.875rem;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: #8b949e;
+  background: rgba(22, 27, 34, 0.95);
+  border-bottom: 1px solid rgba(48, 54, 61, 0.6);
+  font-family: var(--font-jetbrains), monospace;
+  background-image:
+    radial-gradient(circle at 14px 50%, #ff5f57 5px, transparent 5px),
+    radial-gradient(circle at 32px 50%, #febc2e 5px, transparent 5px),
+    radial-gradient(circle at 50px 50%, #28c840 5px, transparent 5px);
+  background-repeat: no-repeat;
+  padding-left: 4.25rem;
+}
+
+[data-theme="developer"] .term-card .tech-pill,
+[data-theme="developer"] .term-card .term-item {
+  border-radius: 4px !important;
+  border: 1px solid rgba(48, 54, 61, 0.5) !important;
+  background: rgba(22, 27, 34, 0.7) !important;
+  font-family: var(--font-jetbrains), monospace !important;
+  font-size: 12px !important;
+}
+
+[data-theme="developer"] .term-prefix {
+  color: #3fb950;
+  margin-right: 0.5rem;
+  user-select: none;
+}
+
+/* ── Developer mode: blinking cursor after hero name ──── */
+[data-theme="developer"] .dev-cursor::after {
+  content: "▍";
+  display: inline-block;
+  color: #3fb950;
+  animation: blink-cursor 1s steps(2) infinite;
+  margin-left: 0.15em;
+  font-weight: 300;
+}
+@keyframes blink-cursor {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Developer mode: section titles get prompt ─────────── */
+[data-theme="developer"] .section-title h2::before {
+  content: "> ";
+  color: #3fb950;
+  font-weight: 400;
+}
+
+/* ── Developer mode: project cards ─────────────────────── */
+[data-theme="developer"] .project-card > div > .group {
+  border-radius: 8px !important;
+  border: 1px solid rgba(48, 54, 61, 0.8) !important;
+  background: rgba(13, 17, 23, 0.92) !important;
+  backdrop-filter: none !important;
+}
+
+/* ── Developer mode: contact buttons ───────────────────── */
+[data-theme="developer"] .contact-section a {
+  border-radius: 6px !important;
+}
+
+/* ── Developer mode: certs / education ─────────────────── */
+[data-theme="developer"] .education-section article {
+  border-radius: 8px !important;
+}
+
+/* ── Developer mode: footer ────────────────────────────── */
+[data-theme="developer"] footer {
+  font-family: var(--font-jetbrains), monospace;
+}
+
+/* ── Cyberpunk glow on headings ────────────────────────── */
+[data-theme="cyberpunk"] h1,
+[data-theme="cyberpunk"] h2 {
+  text-shadow: 0 0 30px rgba(0, 229, 255, 0.2), 0 0 60px rgba(0, 229, 255, 0.08);
+}
+
+[data-theme="cyberpunk"] .tech-pill:hover,
+[data-theme="cyberpunk"] .project-card:hover {
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.12), 0 0 40px rgba(0, 229, 255, 0.05);
+}
+
+
+/* ── Film grain ────────────────────────────────────────── */
 .film-grain {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
@@ -34,43 +390,23 @@ body {
 }
 
 @keyframes grain-shift {
-  0% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(-1.2%, 0.8%);
-  }
-  50% {
-    transform: translate(0.6%, -1%);
-  }
-  75% {
-    transform: translate(-0.4%, -0.6%);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-1.2%, 0.8%); }
+  50% { transform: translate(0.6%, -1%); }
+  75% { transform: translate(-0.4%, -0.6%); }
+  100% { transform: translate(0, 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .film-grain {
-    animation: none;
-  }
+  .film-grain { animation: none; }
 }
 
-/* Intro bio: per-letter hover jump (replaces old parallax). */
+/* ── Intro bio: per-letter hover jump ──────────────────── */
 @keyframes bio-letter-jump {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  28% {
-    transform: translate3d(0, -11px, 0);
-  }
-  52% {
-    transform: translate3d(0, -3px, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
+  0% { transform: translate3d(0, 0, 0); }
+  28% { transform: translate3d(0, -11px, 0); }
+  52% { transform: translate3d(0, -3px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
 }
 
 .bio-letter {
@@ -79,13 +415,9 @@ body {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .bio-letter:hover {
-    animation: bio-letter-jump 0.45s ease;
-  }
+  .bio-letter:hover { animation: bio-letter-jump 0.45s ease; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bio-letter:hover {
-    animation: none;
-  }
+  .bio-letter:hover { animation: none; }
 }

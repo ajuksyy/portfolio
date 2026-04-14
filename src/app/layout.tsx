@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Outfit, Source_Serif_4 } from "next/font/google";
+import { Inter, Outfit, Source_Serif_4, JetBrains_Mono } from "next/font/google";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
 const displayFont = Outfit({
@@ -16,12 +17,18 @@ const bodyFont = Inter({
   weight: ["400", "500", "600"],
 });
 
-/** Long-form bio / editorial blocks — pairs with Inter + Outfit. */
 const serifFont = Source_Serif_4({
   variable: "--font-source-serif",
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600"],
+});
+
+const monoFont = JetBrains_Mono({
+  variable: "--font-jetbrains",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -37,9 +44,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${displayFont.variable} ${bodyFont.variable} ${serifFont.variable} antialiased`}
+        className={`${displayFont.variable} ${bodyFont.variable} ${serifFont.variable} ${monoFont.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

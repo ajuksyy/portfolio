@@ -6,6 +6,8 @@ import { CustomCursor } from "@/components/CustomCursor";
 import { FilmGrain } from "@/components/FilmGrain";
 import { HeroThreeInteractive } from "@/components/HeroThreeInteractive";
 import { IntroBioParallax } from "@/components/IntroBioParallax";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import { useTheme } from "@/components/ThemeProvider";
 import { motion } from "framer-motion";
 import { SectionParticles } from "@/components/SectionParticles";
 import { projectsParticleOptions } from "@/lib/particlePresets";
@@ -138,6 +140,8 @@ const INTRO_BIO_PARAGRAPHS = [
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
+  const isDev = theme === "developer";
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -269,6 +273,7 @@ export default function Home() {
     >
       <FilmGrain />
       <CustomCursor />
+      <ThemeSwitcher />
 
       <div className="relative z-[2]">
       <section className="hero-section relative flex min-h-screen w-full items-center overflow-hidden">
@@ -283,10 +288,10 @@ export default function Home() {
               className="text-[13px] text-[var(--ink)]/45"
               style={{ fontFamily: "var(--font-inter)", letterSpacing: "0.02em" }}
             >
-              Hello — I&apos;m
+              {isDev ? "$ whoami" : "Hello — I\u0027m"}
             </p>
             <h1
-              className="mt-3 text-[clamp(3rem,11vw,5.5rem)] font-light leading-none tracking-[-0.03em] text-[var(--ink)]"
+              className={`mt-3 text-[clamp(3rem,11vw,5.5rem)] font-light leading-none tracking-[-0.03em] text-[var(--ink)] ${isDev ? "dev-cursor" : ""}`}
               style={{ fontFamily: "var(--font-outfit)" }}
             >
               Ajmal
@@ -299,10 +304,10 @@ export default function Home() {
             </p>
             <a
               href="#toolkit"
-              className="explore-cta mt-10 inline-flex items-center border-b border-[var(--ink)]/25 pb-1 text-sm text-[var(--ink)] transition-colors hover:border-[var(--ink)]"
-              style={{ fontFamily: "var(--font-inter)" }}
+              className="explore-cta mt-10 inline-flex items-center border-b pb-1 text-sm text-[var(--ink)] transition-colors"
+              style={{ borderColor: "var(--divider)", fontFamily: "var(--font-inter)" }}
             >
-              View work
+              {isDev ? "$ cd ./work" : "View work"}
             </a>
           </div>
 
@@ -363,7 +368,7 @@ export default function Home() {
                 },
               }}
             >
-              Toolkit
+              {isDev ? "$ cat stack.yml" : "Toolkit"}
             </motion.p>
             <motion.h2
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]"
@@ -378,7 +383,7 @@ export default function Home() {
                 },
               }}
             >
-              What I actually use
+              {isDev ? "dependencies" : "What I actually use"}
             </motion.h2>
             <motion.p
               className="mt-4 max-w-xl md:mx-0 mx-auto text-sm md:text-base opacity-55 leading-relaxed"
@@ -392,7 +397,7 @@ export default function Home() {
                 },
               }}
             >
-              Grouped by how it shows up in real work — not a keyword dump.
+              {isDev ? "# grouped by real-world usage" : "Grouped by how it shows up in real work — not a keyword dump."}
             </motion.p>
             <motion.div
               className="mx-auto mt-6 h-px w-20 origin-center bg-linear-to-r from-transparent via-[var(--ink)]/20 to-transparent md:mx-0 md:origin-left"
@@ -408,25 +413,25 @@ export default function Home() {
           </motion.div>
 
           <div className="tech-bento mt-14 grid grid-cols-1 gap-5 md:gap-6 lg:grid-cols-12">
-            <article className="lg:col-span-8 rounded-3xl border border-black/10 bg-white/72 p-6 md:p-8 backdrop-blur-md shadow-[0_24px_80px_-40px_rgba(15,18,24,0.18)]">
+            <article className={`lg:col-span-8 rounded-3xl border p-6 md:p-8 backdrop-blur-md shadow-[0_24px_80px_-40px_rgba(15,18,24,0.18)] ${isDev ? "term-card" : ""}`} data-terminal-title={isDev ? "~/stack — working-kit" : undefined} style={{ background: "var(--card-bg)", borderColor: "var(--card-border)" }}>
               <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <p
                     className="text-[10px] uppercase tracking-[0.28em] opacity-70"
                     style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
                   >
-                    Working kit
+                    {isDev ? "$ ls tools/" : "Working kit"}
                   </p>
                   <h3
                     className="mt-2 text-2xl md:text-3xl leading-tight"
                     style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
                   >
-                    My go-to stack when shipping
+                    {isDev ? "npm list --depth=0" : "My go-to stack when shipping"}
                   </h3>
                 </div>
                 <span
-                  className="rounded-full border border-black/14 bg-black/[0.04] px-3 py-1 text-[10px] uppercase tracking-[0.2em]"
-                  style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
+                  className="rounded-full border px-3 py-1 text-[10px] uppercase tracking-[0.2em]"
+                  style={{ borderColor: "var(--card-border)", background: "var(--pill-bg)", color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
                 >
                   {TECH_GROUPS[0].items.length} core tools
                 </span>
@@ -441,9 +446,10 @@ export default function Home() {
                 ].map((point) => (
                   <div
                     key={point}
-                    className="rounded-xl border border-black/10 bg-white/55 px-3.5 py-3 text-sm"
-                    style={{ color: "var(--ink-soft)", fontFamily: "var(--font-inter)" }}
+                    className={`rounded-xl border px-3.5 py-3 text-sm ${isDev ? "term-item" : ""}`}
+                    style={{ background: "var(--pill-bg)", borderColor: "var(--card-border)", color: "var(--ink-soft)", fontFamily: "var(--font-inter)" }}
                   >
+                    {isDev && <span className="term-prefix">$</span>}
                     {point}
                   </div>
                 ))}
@@ -453,8 +459,8 @@ export default function Home() {
                 {TECH_GROUPS[0].items.map((name) => (
                   <span
                     key={name}
-                    className="tech-pill inline-flex items-center rounded-full border border-black/12 bg-white/50 px-3.5 py-2 text-sm text-[var(--ink)] transition-colors hover:border-black/22 hover:bg-black/[0.05] cursor-default"
-                    style={{ fontFamily: "var(--font-inter)" }}
+                    className="tech-pill inline-flex items-center rounded-full border px-3.5 py-2 text-sm text-[var(--ink)] transition-colors cursor-default"
+                    style={{ background: "var(--pill-bg)", borderColor: "var(--pill-border)", fontFamily: "var(--font-inter)" }}
                   >
                     {name}
                   </span>
@@ -463,46 +469,47 @@ export default function Home() {
             </article>
 
             <aside className="lg:col-span-4 flex flex-col gap-5 md:gap-6">
-              <article className="rounded-3xl border border-black/10 bg-white/60 p-6 md:p-7">
+              <article className={`rounded-3xl border p-6 md:p-7 ${isDev ? "term-card" : ""}`} data-terminal-title={isDev ? "~/stack — active" : undefined} style={{ background: "var(--card-bg)", borderColor: "var(--card-border)" }}>
                 <p
                   className="mb-2 text-[10px] uppercase tracking-[0.25em]"
                   style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
                 >
-                  Currently building with
+                  {isDev ? "$ cat active-deps.txt" : "Currently building with"}
                 </p>
                 <div className="mb-4 h-px w-full bg-linear-to-r from-transparent via-[var(--ink)]/18 to-transparent" />
                 <div className="space-y-2.5">
                   {TECH_GROUPS[1].items.map((name) => (
                     <div
                       key={name}
-                      className="rounded-lg border border-black/10 bg-white/50 px-3 py-2 text-sm"
-                      style={{ color: "var(--ink-soft)", fontFamily: "var(--font-inter)" }}
+                      className={`rounded-lg border px-3 py-2 text-sm ${isDev ? "term-item" : ""}`}
+                      style={{ background: "var(--pill-bg)", borderColor: "var(--card-border)", color: "var(--ink-soft)", fontFamily: "var(--font-inter)" }}
                     >
+                      {isDev && <span className="term-prefix">▸</span>}
                       {name}
                     </div>
                   ))}
                 </div>
               </article>
 
-              <article className="rounded-3xl border border-black/10 bg-white/58 p-6 md:p-7 backdrop-blur-md">
+              <article className={`rounded-3xl border p-6 md:p-7 backdrop-blur-md ${isDev ? "term-card" : ""}`} data-terminal-title={isDev ? "~/stack — misc" : undefined} style={{ background: "var(--card-bg)", borderColor: "var(--card-border)" }}>
                 <h4
                   className="mb-2 text-lg"
                   style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
                 >
-                  Outside frontend
+                  {isDev ? "other_langs/" : "Outside frontend"}
                 </h4>
                 <p
                   className="mb-4 text-xs opacity-65"
                   style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
                 >
-                  Used for experiments, data tasks, and quick internal tooling.
+                  {isDev ? "# experiments, data tasks, internal tooling" : "Used for experiments, data tasks, and quick internal tooling."}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {TECH_GROUPS[2].items.map((name) => (
                     <span
                       key={name}
-                      className="tech-pill inline-flex rounded-md border border-white/6 bg-black/25 px-3 py-1.5 text-xs font-medium text-[var(--mist-muted)] transition-colors hover:text-[var(--ink)] cursor-default"
-                      style={{ fontFamily: "var(--font-inter)" }}
+                      className="tech-pill inline-flex rounded-md border px-3 py-1.5 text-xs font-medium text-[var(--mist-muted)] transition-colors hover:text-[var(--ink)] cursor-default"
+                      style={{ background: "var(--pill-bg)", borderColor: "var(--pill-border)", fontFamily: "var(--font-inter)" }}
                     >
                       {name}
                     </span>
@@ -522,22 +529,22 @@ export default function Home() {
               className="text-xs tracking-[0.35em] uppercase mb-4"
               style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
             >
-              Work
+              {isDev ? "$ git log --oneline" : "Work"}
             </p>
             <h2
               className="text-4xl md:text-6xl lg:text-7xl leading-tight"
               style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
             >
-              Experience
+              {isDev ? "work_history" : "Experience"}
             </h2>
             <div className="mx-auto mt-6 h-px w-20 bg-linear-to-r from-transparent via-[var(--ink)]/22 to-transparent" />
           </div>
 
           <div className="relative">
-            <div className="absolute left-6 md:left-8 top-0 bottom-0 w-px bg-linear-to-b from-black/18 via-black/10 to-transparent" />
+            <div className="absolute left-6 md:left-8 top-0 bottom-0 w-px" style={{ background: `linear-gradient(to bottom, var(--timeline-line), transparent)` }} />
 
             <div className="exp-card relative pl-16 md:pl-20 pb-14">
-              <div className="absolute left-[18px] md:left-[26px] top-2 w-3 h-3 rounded-full bg-[var(--ink)] shadow-[0_0_14px_rgba(12,12,14,0.2)]" />
+              <div className="absolute left-[18px] md:left-[26px] top-2 w-3 h-3 rounded-full" style={{ background: "var(--timeline-dot)" }} />
               <div className="flex flex-col md:flex-row md:items-baseline gap-1 md:gap-4 mb-4">
                 <h3
                   className="text-2xl md:text-3xl font-semibold"
@@ -576,7 +583,7 @@ export default function Home() {
                       fontFamily: "var(--font-inter)",
                     }}
                   >
-                    <span className="mt-1.5 shrink-0 w-1 h-1 rounded-full bg-[var(--ink)]" />
+                    <span className="mt-1.5 shrink-0 w-1 h-1 rounded-full" style={{ background: "var(--timeline-dot)" }} />
                     {item}
                   </li>
                 ))}
@@ -584,7 +591,7 @@ export default function Home() {
             </div>
 
             <div className="exp-card relative pl-16 md:pl-20">
-              <div className="absolute left-[18px] md:left-[26px] top-2 w-3 h-3 rounded-full border-2 border-[var(--ink)]/35 bg-white" />
+              <div className="absolute left-[18px] md:left-[26px] top-2 w-3 h-3 rounded-full border-2" style={{ borderColor: "var(--timeline-line)", background: "var(--background)" }} />
               <div className="flex flex-col md:flex-row md:items-baseline gap-1 md:gap-4 mb-4">
                 <h3
                   className="text-2xl md:text-3xl font-semibold"
@@ -622,7 +629,7 @@ export default function Home() {
                       fontFamily: "var(--font-inter)",
                     }}
                   >
-                    <span className="mt-1.5 shrink-0 w-1 h-1 rounded-full bg-[var(--ink)]" />
+                    <span className="mt-1.5 shrink-0 w-1 h-1 rounded-full" style={{ background: "var(--timeline-dot)" }} />
                     {item}
                   </li>
                 ))}
@@ -641,18 +648,18 @@ export default function Home() {
               className="text-xs tracking-[0.35em] uppercase mb-4"
               style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
             >
-              Selected builds
+              {isDev ? "$ ls ~/repos" : "Selected builds"}
             </p>
             <h2
               className="text-4xl md:text-6xl lg:text-7xl leading-tight"
               style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
             >
-              Projects
+              {isDev ? "./projects" : "Projects"}
             </h2>
             <div className="mx-auto mt-6 h-px w-20 bg-linear-to-r from-transparent via-[var(--ink)]/22 to-transparent" />
           </div>
 
-          <div className="absolute left-1/2 top-[260px] bottom-36 w-px bg-linear-to-b from-transparent via-[var(--ink)]/15 to-transparent hidden md:block" />
+          <div className="absolute left-1/2 top-[260px] bottom-36 w-px hidden md:block" style={{ background: `linear-gradient(to bottom, transparent, var(--timeline-line), transparent)` }} />
 
           <div className="space-y-16 md:space-y-24">
             {PROJECTS.map((project, i) => {
@@ -661,20 +668,20 @@ export default function Home() {
                 <div key={project.title} className="project-card relative">
                   <span
                     className={`ghost-number absolute top-0 text-[100px] md:text-[140px] font-bold leading-none select-none pointer-events-none hidden md:block ${isLeft ? "right-2 md:right-[6%]" : "left-2 md:left-[6%]"}`}
-                    style={{ color: "rgba(12,14,18,0.07)", fontFamily: "var(--font-outfit)" }}
+                    style={{ color: "var(--ghost-number)", fontFamily: "var(--font-outfit)" }}
                   >
                     {String(i + 1).padStart(2, "0")}
                   </span>
 
-                  <div className="absolute left-1/2 top-5 -translate-x-1/2 w-2 h-2 rounded-full bg-white border border-black/12 hidden md:block z-10" />
+                  <div className="absolute left-1/2 top-5 -translate-x-1/2 w-2 h-2 rounded-full border hidden md:block z-10" style={{ background: "var(--background)", borderColor: "var(--card-border)" }} />
 
                   <div className={`relative md:w-[54%] ${isLeft ? "" : "md:ml-auto"}`}>
-                    <div className="group relative overflow-hidden rounded-2xl border border-black/8 bg-white/72 p-6 md:p-8 backdrop-blur-md transition-all duration-500 hover:border-black/18 hover:shadow-[0_20px_50px_-24px_rgba(15,18,24,0.12)]">
-                      <div className="absolute inset-0 bg-linear-to-br from-black/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className={`group relative overflow-hidden rounded-2xl border p-6 md:p-8 backdrop-blur-md transition-all duration-500 ${isDev ? "term-card" : ""}`} data-terminal-title={isDev ? `~/projects/${project.title.toLowerCase().replace(/\s+/g, "-")}` : undefined} style={{ background: "var(--card-bg)", borderColor: "var(--card-border)" }}>
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: "linear-gradient(135deg, var(--pill-bg), transparent)" }} />
 
                       <span
                         className="md:hidden text-4xl font-bold absolute top-4 right-4 leading-none select-none pointer-events-none"
-                        style={{ color: "rgba(12,14,18,0.07)", fontFamily: "var(--font-outfit)" }}
+                        style={{ color: "var(--ghost-number)", fontFamily: "var(--font-outfit)" }}
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
@@ -736,11 +743,8 @@ export default function Home() {
                           {project.tech.map((t) => (
                             <span
                               key={t}
-                              className="text-[10px] tracking-wider uppercase px-2.5 py-1 rounded-md border border-black/10 bg-white/45"
-                              style={{
-                                color: "var(--mist-accent)",
-                                fontFamily: "var(--font-inter)",
-                              }}
+                              className="text-[10px] tracking-wider uppercase px-2.5 py-1 rounded-md border"
+                              style={{ background: "var(--pill-bg)", borderColor: "var(--pill-border)", color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
                             >
                               {t}
                             </span>
@@ -759,7 +763,8 @@ export default function Home() {
       <section className="education-section relative px-5 sm:px-8 py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-background" />
         <div
-          className="pointer-events-none absolute right-[8%] top-[42%] hidden lg:block h-48 w-48 rounded-full border border-black/6"
+          className="pointer-events-none absolute right-[8%] top-[42%] hidden lg:block h-48 w-48 rounded-full border"
+          style={{ borderColor: "var(--divider)" }}
           aria-hidden
         />
         <div className="relative z-10 max-w-4xl mx-auto">
@@ -768,14 +773,14 @@ export default function Home() {
               className="text-[11px] tracking-[0.28em] uppercase mb-4"
               style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
             >
-              Formal path
+              {isDev ? "$ cat education.log" : "Formal path"}
             </p>
             <div className="md:flex md:items-baseline md:justify-between gap-8 md:gap-12">
               <h2
                 className="text-4xl md:text-5xl lg:text-6xl leading-[1.05] font-light tracking-[-0.02em]"
                 style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
               >
-                Education
+                {isDev ? "./education" : "Education"}
               </h2>
               <p
                 className="mt-5 md:mt-0 max-w-[16rem] text-[13px] leading-relaxed md:text-right"
@@ -789,14 +794,16 @@ export default function Home() {
           <div className="relative mb-20 md:mb-24">
             {/* Single axis: line + dots share center (w-px centered with -translate-x-1/2) */}
             <div
-              className="absolute left-[15px] top-2 bottom-2 w-px -translate-x-1/2 bg-linear-to-b from-black/12 via-black/8 to-transparent"
+              className="absolute left-[15px] top-2 bottom-2 w-px -translate-x-1/2"
+              style={{ background: `linear-gradient(to bottom, var(--timeline-line), transparent)` }}
               aria-hidden
             />
             <ul className="space-y-14 md:space-y-16">
               {EDUCATION_ENTRIES.map((edu) => (
                 <li key={edu.title} className="relative pl-10 md:pl-11">
                   <span
-                    className="absolute left-[15px] top-[0.35rem] size-2 -translate-x-1/2 rounded-full border-2 border-white bg-(--ink)/25 shadow-[0_0_0_1px_rgba(15,18,24,0.08)]"
+                    className="absolute left-[15px] top-[0.35rem] size-2 -translate-x-1/2 rounded-full border-2"
+                    style={{ borderColor: "var(--background)", background: "var(--timeline-line)" }}
                     aria-hidden
                   />
                   <time
@@ -828,7 +835,7 @@ export default function Home() {
             </ul>
           </div>
 
-          <div className="border-t border-black/10 pt-16 md:pt-20">
+          <div className="border-t pt-16 md:pt-20" style={{ borderColor: "var(--divider)" }}>
             <h3
               className="text-xl md:text-2xl font-light tracking-[-0.02em] mb-2"
               style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
@@ -843,11 +850,11 @@ export default function Home() {
               belongs together.
             </p>
 
-            <article className="mb-8 rounded-2xl border border-amber-950/10 bg-linear-to-br from-amber-50/80 via-white/60 to-white/40 p-6 md:p-8 backdrop-blur-sm">
+            <article className="mb-8 rounded-2xl border p-6 md:p-8 backdrop-blur-sm" style={{ background: "var(--cert-spotlight-bg)", borderColor: "var(--cert-spotlight-border)" }}>
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
                 <span
-                  className="inline-flex w-fit shrink-0 rounded-lg border border-amber-900/15 bg-amber-100/60 px-2.5 py-1 text-[10px] font-medium tracking-wide text-amber-950/75"
-                  style={{ fontFamily: "var(--font-inter)" }}
+                  className="inline-flex w-fit shrink-0 rounded-lg border px-2.5 py-1 text-[10px] font-medium tracking-wide"
+                  style={{ background: "var(--cert-badge-bg)", borderColor: "var(--cert-badge-border)", color: "var(--cert-badge-text)", fontFamily: "var(--font-inter)" }}
                 >
                   {CERT_SPOTLIGHT.label}
                 </span>
@@ -868,14 +875,14 @@ export default function Home() {
               </div>
             </article>
 
-            <div className="rounded-2xl border border-slate-400/15 bg-white/45 p-6 md:p-8 backdrop-blur-sm">
+            <div className="rounded-2xl border p-6 md:p-8 backdrop-blur-sm" style={{ background: "var(--cert-panel-bg)", borderColor: "var(--cert-panel-border)" }}>
               <p
                 className="text-[10px] tracking-[0.22em] uppercase mb-6 opacity-55"
                 style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
               >
                 Cisco · networking track
               </p>
-              <div className="grid gap-8 md:grid-cols-2 md:gap-0 md:divide-x md:divide-black/8">
+              <div className="grid gap-8 md:grid-cols-2 md:gap-0 md:divide-x" style={{ borderColor: "var(--divider)" }}>
                 {CERT_CISCO.map((c, i) => (
                   <div key={c.title} className={i === 1 ? "md:pl-10" : "md:pr-10"}>
                     <h4
@@ -906,13 +913,13 @@ export default function Home() {
               className="text-xs tracking-[0.35em] uppercase mb-3"
               style={{ color: "var(--mist-accent)", fontFamily: "var(--font-inter)" }}
             >
-              Contact
+              {isDev ? "$ ping" : "Contact"}
             </p>
             <h2
               className="text-4xl md:text-6xl lg:text-7xl leading-tight mb-4"
               style={{ color: "var(--ink)", fontFamily: "var(--font-outfit)" }}
             >
-              Say hello
+              {isDev ? "reach_me()" : "Say hello"}
             </h2>
             <p
               className="text-sm md:text-base leading-relaxed max-w-lg opacity-55 md:mx-0 mx-auto"
@@ -926,14 +933,15 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row md:flex-row flex-wrap md:justify-start justify-center gap-3 sm:gap-4">
             <a
               href="mailto:ajmalpomp124@gmail.com"
-              className="group inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl border border-black/12 bg-white/70 backdrop-blur-sm transition-all duration-300 hover:border-black/25 hover:bg-white/92"
+              className="group inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl border backdrop-blur-sm transition-all duration-300"
+              style={{ background: "var(--contact-btn-bg)", borderColor: "var(--contact-btn-border)" }}
             >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="var(--mist-accent)"
+                stroke="var(--contact-icon)"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -953,13 +961,14 @@ export default function Home() {
               href="https://www.linkedin.com/in/mohamed-ajmal-5abb432b7/"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl border border-black/12 bg-white/70 backdrop-blur-sm transition-all duration-300 hover:border-black/25 hover:bg-white/92"
+              className="group inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl border backdrop-blur-sm transition-all duration-300"
+              style={{ background: "var(--contact-btn-bg)", borderColor: "var(--contact-btn-border)" }}
             >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
-                fill="var(--mist-accent)"
+                fill="var(--contact-icon)"
                 className="group-hover:fill-[var(--ink)] transition-colors shrink-0"
               >
                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -977,13 +986,14 @@ export default function Home() {
               href="https://gitlab.com/ajuksyy"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl border border-black/12 bg-white/70 backdrop-blur-sm transition-all duration-300 hover:border-black/25 hover:bg-white/92"
+              className="group inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl border backdrop-blur-sm transition-all duration-300"
+              style={{ background: "var(--contact-btn-bg)", borderColor: "var(--contact-btn-border)" }}
             >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
-                fill="var(--mist-accent)"
+                fill="var(--contact-icon)"
                 className="group-hover:fill-[var(--ink)] transition-colors shrink-0"
               >
                 <path d="m22 13.29-3.33-10a.42.42 0 0 0-.14-.18.38.38 0 0 0-.22-.11.39.39 0 0 0-.23.07.42.42 0 0 0-.14.18l-2.26 6.67H8.32L6.06 3.26a.42.42 0 0 0-.14-.18.38.38 0 0 0-.23-.07.39.39 0 0 0-.22.11.42.42 0 0 0-.14.18L2 13.29a.74.74 0 0 0 .27.83L12 21l9.69-6.88a.71.71 0 0 0 .31-.83Z" />
@@ -999,7 +1009,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="relative border-t border-black/6 px-6 py-10 text-center">
+      <footer className="relative border-t px-6 py-10 text-center" style={{ borderColor: "var(--footer-border)" }}>
         <div className="absolute inset-0 bg-background" />
         <div className="relative z-10 flex flex-col items-center gap-3">
           <div
@@ -1010,7 +1020,7 @@ export default function Home() {
             className="text-xs text-[var(--mist-muted)]/80"
             style={{ fontFamily: "var(--font-inter)" }}
           >
-            Mohamed Ajmal Ahmed · {new Date().getFullYear()}
+            {isDev ? `$ echo "Mohamed Ajmal Ahmed" — PID ${new Date().getFullYear()}` : `Mohamed Ajmal Ahmed · ${new Date().getFullYear()}`}
           </p>
         </div>
       </footer>
