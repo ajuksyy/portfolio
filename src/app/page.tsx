@@ -10,6 +10,7 @@ import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { useTheme } from "@/components/ThemeProvider";
 import { motion } from "framer-motion";
 import { SectionParticles } from "@/components/SectionParticles";
+import { PingPongGame } from "@/components/PingPongGame";
 import { projectsParticleOptions } from "@/lib/particlePresets";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
@@ -1005,6 +1006,16 @@ export default function Home() {
                 GitLab
               </span>
             </a>
+          </div>
+
+          <div className="mt-16 md:mt-20">
+            <p
+              className="text-center text-[10px] tracking-[0.3em] uppercase mb-6 opacity-45"
+              style={{ color: "var(--mist-muted)", fontFamily: "var(--font-inter)" }}
+            >
+              {isDev ? "$ ./pong --interactive" : "Or take a break"}
+            </p>
+            <PingPongGame />
           </div>
         </div>
       </section>
